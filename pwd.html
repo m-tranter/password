@@ -24,21 +24,18 @@
     <h1>Password Generator</h1>
     <div class="container">
       <label for="words">Words: </label>
-      <input type="number" id="words" value="2" min="2" max="4" />
+      <input type="number" id="words" value="2" min="2" max="4" size="1" />
       <label for="capitals">Capital Letters: </label>
-      <input type="number" id="capitals" value="1" min="1" max="3" />
+      <input type="number" id="capitals" value="1" min="1" max="3" size="1" />
       <label for="numbers">Numbers: </label>
-      <input type="number" id="numbers" value="1" min="1" max="3" />
+      <input type="number" id="numbers" value="1" min="1" max="3" size="1" />
       <label for="words">Special Characters: </label>
-      <input type="number" id="special" value="1" min="1" max="3" />
+      <input type="number" id="special" value="1" min="1" max="3" size="1" />
     </div>
-    <hr />
+    <br />
     <div class="container">
       <button id="gen" onclick="gen()">Generate</button>
       <button onclick="shuffle()">Shuffle</button>
-    </div>
-    <hr />
-    <div class="container">
       <button type="button" id="copy" onclick="copyPwd()">
         <i class="fa fa-copy"></i>
       </button>
