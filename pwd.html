@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Stop IE opening local pages in compatibility mode. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Open+Sans+Condensed:wght@700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link href="./400-cec-styles.min.css" rel="stylesheet" type="text/css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  </head>
+
+  <body>
+    <h1>Password Generator</h1>
+    <div class="container">
+      <label for="words">Words: </label>
+      <input type="number" id="words" value="2" min="2" max="4" />
+      <label for="capitals">Capital Letters: </label>
+      <input type="number" id="capitals" value="1" min="1" max="3" />
+      <label for="numbers">Numbers: </label>
+      <input type="number" id="numbers" value="1" min="1" max="3" />
+      <label for="words">Special Characters: </label>
+      <input type="number" id="special" value="1" min="1" max="3" />
+    </div>
+    <hr />
+    <div class="container">
+      <button id="gen" onclick="gen()">Generate</button>
+      <button onclick="shuffle()">Shuffle</button>
+    </div>
+    <hr />
+    <div class="container">
+      <button type="button" id="copy" onclick="copyPwd()">
+        <i class="fa fa-copy"></i>
+      </button>
+      <input type="text" disabled id="pwdArea" />
+    </div>
+
+    <script src="short_words.js"></script>
+
+    <script>
+      "use strict";
+
+      let display = document.getElementById("display");
+      let pword = document.getElementById("pwdArea");
+      let genBtn = document.getElementById("gen");
+      let words = document.getElementById("words");
+      let capitals = document.getElementById("capitals");
+      let numbers = document.getElementById("numbers");
+      let special = document.getElementById("special");
+      let elems = [];
+      let chars = [
+        "!",
+        '"',
+        "^",
+        "*",
+        "(",
+        ")",
+        "-",
+        "_",
+        "£",
+        "$",
+        "%",
+        "+",
+        "=",
+        "[",
+        "]",
+        "{",
+        "}",
+        ",",
+        ".",
+        "#",
+        "?",
+        "/",
+        "<",
+        ">",
+      ];
+
+      // Make enter click the button.
+      genBtn.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+          event.preventDefault();
+          clickBtn();
+        }
+      });
+
+      function copyPwd() {
+        let temp = pword.select();
+        navigator.clipboard.writeText(pword.value);
+      }
+
+      function incl(arr, k) {
+        // Because no Array.includes() on IE version at work.
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i] === k) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      function randomElem(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      function shuffle() {
+        for (var i = elems.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * i);
+          var temp = elems[i];
+          elems[i] = elems[j];
+          elems[j] = temp;
+        }
+        pword.value = elems.join("");
+      }
+
+      function gen() {
+        elems = [];
+        let w = words.value;
+        let c = capitals.value;
+        let n = numbers.value;
+        let s = special.value;
+
+        // Get random words.
+        while (elems.length < w) {
+          var temp = randomElem(short_words);
+          if (!incl(elems, temp)) {
+            elems.push(temp);
+          }
+        }
+
+        // Make capitals.
+        let count = 0;
+        while (count < c) {
+          let wordInd = Math.floor(Math.random() * elems.length);
+          let letterInd = Math.floor(Math.random() * elems[wordInd].length);
+          let letter = elems[wordInd][letterInd];
+          let newLetter = letter.toUpperCase();
+          let word = elems[wordInd];
+          if (newLetter !== letter) {
+            elems[wordInd] =
+              word.slice(0, letterInd) + newLetter + word.slice(letterInd + 1);
+            count += 1;
+          }
+        }
+
+        // Special characters.
+        for (let i = 0; i < s; i++) {
+          elems.push(randomElem(chars));
+        }
+
+        // Numbers.
+        for (let i = 0; i < n; i++) {
+          elems.push(Math.floor(Math.random() * 10).toString());
+        }
+        shuffle();
+        pword.value = elems.join("");
+      }
+    </script>
+  </body>
+</html>
