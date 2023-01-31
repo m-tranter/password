@@ -1,0 +1,17 @@
+h1,
+h2 {
+  color: Navy !important;
+}
+
+input[type="number"] {
+  width: 2.25rem;
+}
+
+#words,
+#capitals,
+#numbers,
+#special {
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  display: block;
+}
